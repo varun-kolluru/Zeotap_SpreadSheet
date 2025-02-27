@@ -18,6 +18,7 @@ export default function Home() {
           isItalic: false,
           fontSize: 14,
           textColor: '#000000',
+          textType: "text",
         }))
       );
       return initialValues;
@@ -150,6 +151,57 @@ export default function Home() {
       }
   
       return newCellValues;
+  };
+  const [isDropdownOpen2, setIsDropdownOpen2] = useState(false);
+  const handleOptionSelect2 = (option) => {
+    const newCellValues = [...cellValues];
+    selectedCells.forEach(({ row, col }) => {
+        newCellValues[row][col].textType= option;
+    });
+    setCellValues(newCellValues);
+    setIsDropdownOpen2(false); // Close the dropdown after applying the operation
+};
+
+const [isDropdownOpen3, setIsDropdownOpen3] = useState(false);
+
+const handleOptionSelect3 = (option) => {
+    const invalidcells = []; 
+    selectedCells.forEach(({ row, col }) => {
+      const cellValue = cellValues[row][col].value; 
+      let isValid = true; 
+      switch (option) {
+        case "isNumbers":
+          if (typeof cellValue !== "number" || cellValue === "") {isValid = false;}
+          break;
+        case "isDate":
+          const dateRegex = /^\d{4}-\d{2}-\d{2}$/; // YYYY-MM-DD format
+          if (!dateRegex.test(cellValue) || isNaN(new Date(cellValue).getTime())) {isValid = false;}
+          break;
+  
+        case "isText":
+          if (typeof cellValue !== "string" || cellValue === "") {isValid = false;}
+          break;
+  
+        default:
+          isValid = false;
+          break;
+      }
+      if (!isValid) {
+        invalidcells.push({ row, col });
+      }
+    });
+  
+    // Show alert with invalid cells
+    if (invalidcells.length > 0) {
+      const invalidCellsList = invalidcells
+        .map(({ row, col }) => `Row ${row + 1}, Column ${col + 1}`)
+        .join("\n");
+      alert(`The following cells have invalid data:\n${invalidCellsList}`);
+    } else {
+      alert("All selected cells have valid data!");
+    }
+  
+    setIsDropdownOpen3(false); // Close the dropdown after applying the operation
   };
 
   const [isDropdownOpen1, setIsDropdownOpen1] = useState(false);
@@ -518,8 +570,9 @@ const handleSave = () => {
                   <button className={`w-10 ${selectedFormatting?.isItalic ? "bg-blue-200" : "bg-gray-200"}`} onClick={toggleItalic}>I</button>
                   <input type="color" value={selectedFormatting?.textColor || '#000000'} onChange={(e) => updateTextColor(e.target.value)}/>
               </div>
+
+              <div className="flex w-1/2 items-center justify-center gap-20">
               {/* Math functions */}
-              <div className="flex w-1/2 items-center justify-center">
                   <div className="relative">
                       <button className="flex w-10" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                           <img className="p-1" src="/images/functions.png" alt="Functions" />
@@ -537,12 +590,10 @@ const handleSave = () => {
                           </div>
                       )}
                   </div>
-              </div>
 
               {/*data quality functions */}
-              <div className="flex w-1/2 items-center justify-center">
                   <div className="relative">
-                      <button className="flex w-10" onClick={() => setIsDropdownOpen1(!isDropdownOpen1)}>
+                      <button className="flex" onClick={() => setIsDropdownOpen1(!isDropdownOpen1)}>
                           <p>DataQ functions </p>
                       </button>
                       {isDropdownOpen1 && (
@@ -557,9 +608,45 @@ const handleSave = () => {
                           </div>
                       )}
                   </div>
-              </div>
 
-          </div>
+              {/*data types */}
+                  <div className="relative">
+                      <button className="flex" onClick={() => setIsDropdownOpen2(!isDropdownOpen2)}>
+                          <p>Data types </p>
+                      </button>
+                      {isDropdownOpen2 && (
+                          <div className="absolute bg-white border border-gray-300 shadow-md mt-1 z-50">
+                              <ul className="space-y-1">
+                                  {["text","number","date","time"].map((option) => (
+                                      <li key={option} className="cursor-pointer p-2 hover:bg-gray-100" onClick={() => handleOptionSelect2(option)}>
+                                          {option}
+                                      </li>
+                                  ))}
+                              </ul>
+                          </div>
+                      )}
+                  </div>
+
+              {/*data validations */}
+              <div className="relative">
+                      <button className="flex" onClick={() => setIsDropdownOpen3(!isDropdownOpen3)}>
+                          <p>Data validations </p>
+                      </button>
+                      {isDropdownOpen3 && (
+                          <div className="absolute bg-white border border-gray-300 shadow-md mt-1 z-50">
+                              <ul className="space-y-1">
+                                  {["isNumbers", "isDate", "isText"].map((option) => (
+                                      <li key={option} className="cursor-pointer p-2 hover:bg-gray-100" onClick={() => handleOptionSelect3(option)}>
+                                          {option}
+                                      </li>
+                                  ))}
+                              </ul>
+                          </div>
+                      )}
+                  </div>
+
+              </div>
+            </div>
 
           {/* Formulae bar */}
           <div className="flex h-8 border-2 border-black-500">
@@ -606,7 +693,7 @@ const handleSave = () => {
                                       ) : (
                                           <>
                                               <input
-                                                  type="text"
+                                                  type={cellValues[rowIndex][colIndex].textType}
                                                   className="w-full h-full p-1"
                                                   value={cellValues[rowIndex][colIndex].value}
                                                   onChange={(e) => handleCellChange(rowIndex, colIndex, e)}
