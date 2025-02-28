@@ -1,36 +1,21 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
+## command to run the app
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack used
+### Next.JS:-
+1. handles server-side rendering, which improves performance and SEO. Your app loads faster because the initial HTML is generated on the server and sent to the browser.
+2. Hot Module Replacement (HMR), which means your app updates instantly as you make changes during development without requiring a full page reload.
+3. easier for binding HTML and JavaScript because It uses a component-based architecture that combines HTML and JavaScript in one place,has built-in state management
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Tailwind CSS:-
+1. simple and easy in-line styling
+2. Highly customizable
+3. good developer community
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+### why kept all the code in a single component?
+1. This web app have mainly 3 tightly coupled components,meaning lot of data and actions need to be transfered between components for every action, so To reduce data transfer between components. 
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#### note:- This is a valid approach for small apps with tightly coupled components. For big apps, code redability and maintanability will be difficult.
