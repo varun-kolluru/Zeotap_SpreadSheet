@@ -19,3 +19,13 @@ npm run start
 1. This web app have mainly 3 tightly coupled components,meaning lot of data and actions need to be transfered between components for every action, so To reduce data transfer between components. 
 
 #### note:- This is a valid approach for small apps with tightly coupled components. For big apps, code redability and maintanability will be difficult.
+
+
+## DataStructure used:-
+### 2-D array of js objects
+* 2-D array is standard way to represent a grid
+* object is used to store all properties of cells which may take some extra memory than another array but here is why is choose object:-
+  1. easy to access value
+  2. better readability
+  3. easy to add new properties with out disturbing existing functionality
+
